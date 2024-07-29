@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    container_name: 'db'
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=fast_api
+      - POSTGRES_PASSWORD=fast_api
+      - POSTGRES_DB=fast_api
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    networks:
+      - custom
+networks:
+  custom:
+    driver: bridge
