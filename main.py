@@ -10,13 +10,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 import re
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, UUID4, validator
 
 
 # create async engine for interaction with db
 engine = create_async_engine(settings.REAL_DATABASE_URL, future=True, echo=True)
 # create session for the interaction with db
-async_session = sessionmaker(engine, future=True, class_=AsyncSession)
+async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 Base = declarative_base()
 
@@ -67,7 +67,7 @@ class TunedModel(BaseModel):
 
 
 class ShowUser(TunedModel):
-    user_id = uuid.UUID
+    user_id: UUID4
     name: str
     surname: str
     email: EmailStr
@@ -80,12 +80,10 @@ class UserCreate(BaseModel):
     email: EmailStr
 
     @validator('name', 'surname')
-    def validate_name(cls, value: str, field: ModelField) -> None:
-        print(f'{value = }')
-        print(f'{field = }')
+    def validate_name_surname(cls, value: str, field: ModelField) -> str:
         if not LETTER_MATCH_PATTERN.match(value):
             raise HTTPException(status_code=422, detail=f'{field.name} should contains only letters')
-
+        return value
 
 app = FastAPI(title='Learning FastAPI')
 user_router = APIRouter()
