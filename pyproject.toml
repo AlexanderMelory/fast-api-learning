@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fast-api-learning"
+version = "0.1.0"
+description = ""
+authors = ["Alexander Scherbakov <webmasterdracarys@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+
+[tool.poetry.group.dev.dependencies]
+fastapi = "^0.115.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
