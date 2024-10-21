@@ -4,7 +4,11 @@ from typing import Optional
 from fastapi import FastAPI, Query, Depends
 from pydantic import BaseModel
 
+from app.bookings.router import router as booking_router
+
+
 app = FastAPI()
+app.include_router(booking_router)
 
 
 class HotelsSearchArgs:

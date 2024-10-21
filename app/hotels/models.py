@@ -15,3 +15,13 @@ class Hotel(Base):
     services = Column(JSON)
     rooms_qty = Column(Integer, nullable=False)
     image_id = Column(Integer)
+
+
+class Room(Base):
+    """
+    Комната
+    """
+
+    __tablename__ = 'room'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    number = Column(Integer, nullable=False)
