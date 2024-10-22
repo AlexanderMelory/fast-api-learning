@@ -1,4 +1,6 @@
-from sqlalchemy import select, RowMapping, Sequence
+from typing import List, Any
+
+from sqlalchemy import select
 
 from app.db import async_session_maker
 
@@ -11,11 +13,31 @@ class BaseDAO:
     model = None
 
     @classmethod
-    async def get_all(cls) -> Sequence[RowMapping]:
+    async def get_by_id(cls, id: int) -> Any:
         """
-        Получение всех объектов модели
+        Получение объекта по id
         """
         async with async_session_maker() as session:
-            query = select(cls.model)
+            query = select(cls.model).filter_by(id=id)
             result = await session.execute(query)
-        return result.mappings().all()
+            return result.scalar_one_or_none()
+
+    @classmethod
+    async def get_one_or_none(cls, **filter_by) -> Any:
+        """
+        Получение одного объекта
+        """
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
+
+    @classmethod
+    async def get_all(cls, **filter_by) -> List[Any]:
+        """
+        Получение списка всех объектов модели
+        """
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalars().all()
