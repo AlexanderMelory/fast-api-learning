@@ -1,5 +1,6 @@
-from sqlalchemy import select
-from app.utils.decorators import async_session
+from sqlalchemy import select, RowMapping, Sequence
+
+from app.db import async_session_maker
 
 
 class BaseDAO:
@@ -10,8 +11,11 @@ class BaseDAO:
     model = None
 
     @classmethod
-    @async_session
-    async def get_all(cls, session):
-        query = select(cls.model)
-        result = await session.execute(query)
+    async def get_all(cls) -> Sequence[RowMapping]:
+        """
+        Получение всех объектов модели
+        """
+        async with async_session_maker() as session:
+            query = select(cls.model)
+            result = await session.execute(query)
         return result.mappings().all()
