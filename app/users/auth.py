@@ -8,6 +8,7 @@ from app import settings
 from app.users.dao import UserDAO
 from app.users.models import User
 
+
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 

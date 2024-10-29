@@ -41,8 +41,3 @@ class SHotel(BaseModel):
 @app.get('/hotels')
 def get_hotels(search_args: HotelsSearchArgs = Depends()):
     return search_args
-
-
-@app.post('/bookings')
-def add_booking(booking: SBooking):
-    pass

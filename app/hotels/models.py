@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, JSON
+from sqlalchemy import Column, String, Integer, JSON, ForeignKey, DECIMAL
 
 from app.db import Base
 
@@ -24,4 +24,10 @@ class Room(Base):
 
     __tablename__ = 'room'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    hotel_id = Column(Integer, ForeignKey('hotel.id'), nullable=False)
+    name = Column(String, nullable=False)
+    description = Column(String)
+    price = Column(DECIMAL, nullable=False)
+    services = Column(JSON)
+    quantity = Column(Integer, nullable=False)
     number = Column(Integer, nullable=False)
