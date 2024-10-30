@@ -14,11 +14,9 @@ class BookingDAO(BaseDAO):
     model = Booking
 
     @classmethod
-    async def insert(cls, user_id, room_id, date_from, date_to):
+    async def insert(cls, user, room_id, date_from, date_to):
         async with async_session_maker() as session:
             async with session.begin():
-                user_id = int(user_id) if isinstance(user_id, str) else user_id
-                room_id = int(room_id) if isinstance(room_id, str) else room_id
                 booked_rooms = (
                     select(Booking.room_id).where(
                         and_(
@@ -44,7 +42,7 @@ class BookingDAO(BaseDAO):
                 price = price_result.scalar()
                 add_new_booking = (
                     insert(Booking)
-                    .values(room_id=room_id, date_from=date_from, date_to=date_to, user_id=user_id, price=price)
+                    .values(room_id=room_id, date_from=date_from, date_to=date_to, user_id=user.id, price=price)
                     .returning(Booking)
                 )
                 return await session.execute(add_new_booking)
