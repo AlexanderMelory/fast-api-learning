@@ -24,7 +24,7 @@ async def login(response: Response, data: SUserLogin):  # -> JSONResponse:
     Аутентификация пользователя
     """
     if user := await authenticate_user(data):
-        acces_token = create_access_token({'sub': str(user.id)})
+        acces_token = create_access_token({'id': str(user.id), 'email': user.email})
         response.set_cookie(key='booking_access_token', value=acces_token, httponly=True)
         return {'access_token': acces_token}
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='invalid credentials')
