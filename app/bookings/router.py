@@ -14,7 +14,7 @@ router = APIRouter(prefix='/bookings', tags=['Бронирования'])
 
 
 @router.get('')
-async def get_bookings(request: Request, user: User=Depends(get_current_user))-> List[SBooking]:
+async def get_bookings(request: Request, user: User = Depends(get_current_user)) -> List[SBooking]:
     """
     Список бронирований
     """

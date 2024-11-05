@@ -3,18 +3,17 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi.params import Query
+from fastapi_cache.decorator import cache
 
 from app.hotels.dao import HotelDAO, RoomDAO
 from app.hotels.schemas import HotelInfo, RoomInfo
-
 
 router = APIRouter(prefix='/hotels', tags=['Отели'])
 
 
 @router.get('/')
-async def get_hotels_by_location_time(
-    location: str
-) -> List[HotelInfo]:
+@cache(expire=60)
+async def get_hotels_by_location_time(location: str) -> List[HotelInfo]:
     """
     Получение отелей по локации
     """
