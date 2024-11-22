@@ -1,6 +1,7 @@
 from fastapi import UploadFile, APIRouter
-import shutil
-
+import aiofiles
+from app.settings import settings
+from app.tasks.tasks import process_image
 
 router = APIRouter(prefix='/images', tags=['Изображения'])
 
@@ -10,5 +11,7 @@ async def add_hotel_image(file: UploadFile, name: int):
     """
     Добавление изображения отеля
     """
-    with open(f'app/static/images/{name}.jpg', 'wb+') as f:
-        f.write(await file.read())
+    image_path = f'{settings.IMAGES_DIR}/{name}.jpg'
+    async with aiofiles.open(image_path, 'wb+') as f:
+        await f.write(await file.read())
+        process_image.delay(image_path)

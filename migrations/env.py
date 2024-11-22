@@ -8,7 +8,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from app import settings
+from app.settings import settings
 from app.db import Base
 from app.hotels.models import Hotel, Room
 from app.bookings.models import Booking

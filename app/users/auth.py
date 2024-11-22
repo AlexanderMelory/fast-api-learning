@@ -4,7 +4,7 @@ from typing import Optional
 from jose import jwt
 from passlib.context import CryptContext
 
-from app import settings
+from app.settings import settings
 from app.users.dao import UserDAO
 from app.users.models import User
 

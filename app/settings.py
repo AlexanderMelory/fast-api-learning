@@ -1,18 +1,44 @@
-import os
+from functools import lru_cache
 
-import dotenv
-
-
-dotenv.load_dotenv()
+from pydantic.v1 import BaseSettings
 
 
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
-DB_USER = os.getenv('DB_USER')
-DB_NAME = os.getenv('DB_NAME')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-SECRET_KEY = os.getenv('SECRET_KEY')
-SIGN_ALGORITHM = os.getenv('SIGN_ALGORITHM')
+class Settings(BaseSettings):
+    """
+    Настройки проекта
+    """
+
+    # Настройки БД
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
+    DB_USER: str
+    DB_PASSWORD: str
+
+    # Настройки приложения
+    SECRET_KEY: str
+    SIGN_ALGORITHM: str
+
+    # Настройки статики
+    IMAGES_DIR: str
+
+    # Настройки Celery
+    CELERY_BROKER: str
+
+    class Config(BaseSettings.Config):
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
+
+    @property
+    def DB_URL(self) -> str:
+        return (
+            f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}' f'@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
+        )
 
 
-DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
+
+
+settings = get_settings()

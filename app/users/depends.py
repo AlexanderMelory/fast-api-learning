@@ -2,7 +2,7 @@ from fastapi import HTTPException, status, Depends
 from jose import jwt, JWTError
 from starlette.requests import Request
 
-from app import settings
+from app.settings import settings
 from app.users.dao import UserDAO
 
 
