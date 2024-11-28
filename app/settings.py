@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
 
+    # Настройки Redis
+    REDIS_URL: str
+
     # Настройки приложения
     SECRET_KEY: str
     SIGN_ALGORITHM: str
@@ -24,6 +27,12 @@ class Settings(BaseSettings):
 
     # Настройки Celery
     CELERY_BROKER: str
+
+    # Настройки SMTP
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_USER: str
+    SMTP_PASS: str
 
     class Config(BaseSettings.Config):
         env_file = ".env"
@@ -36,9 +45,8 @@ class Settings(BaseSettings):
         )
 
 
-@lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    return Settings()  # noqa
 
 
 settings = get_settings()
